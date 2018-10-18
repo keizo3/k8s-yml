@@ -24,3 +24,17 @@ $ kubectl delete deployments litecoind
 
 ##### auto scaling
 https://qiita.com/sheepland/items/37ea0b77df9a4b4c9d80
+
+### generate rpcauth
+```
+$ curl -sSL https://raw.githubusercontent.com/litecoin-project/litecoin/master/share/rpcauth/rpcauth.py | python - test
+String to be appended to litecoin.conf:
+rpcauth=test:295f2e1930a0e1bba3914e433690c3e3$dd81d68225a60b7cc9ac10b940c0a74bea59395ea75ccec8a18ecc48282fedc4
+Your password:
+xDOdimwdOde2Gy-NfsV4RcKNQxB98GR7q7nbi9Ul8Fs=
+```
+
+### use local docker image
+```
+eval $(minikube docker-env)
+```
