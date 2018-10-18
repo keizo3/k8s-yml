@@ -1,0 +1,59 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: litecoind-nodeport
+spec:
+  type: NodePort
+  ports:
+  - name: rpcport
+    port: 9332
+    targetPort: 9332
+    nodePort: 30001
+    protocol: TCP
+  - name: p2pport
+    port: 9333
+    targetPort: 9333
+    nodePort: 30002
+    protocol: TCP
+  - name: rpcport-testnet
+    port: 19332
+    targetPort: 19332
+    nodePort: 30003
+    protocol: TCP
+  - name: p2pport-testnet
+    port: 19333
+    targetPort: 19333
+    nodePort: 30004
+    protocol: TCP
+  - name: p2pport-regtest
+    port: 19444
+    targetPort: 19444
+    nodePort: 30005
+    protocol: TCP
+  selector:
+    run: litecoind
+
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: litecoind
+spec:
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        run: litecoind
+    spec:
+      containers:
+      - name: litecoind
+        image: uphold/litecoind
+        imagePullPolicy: IfNotPresent
+        command: ["/entrypoint.sh", "litecoind", "-testnet", "-rpcuser=test", "-rpcpassword=test", "-rpcallowip=0.0.0.0/0"]
+        # command: ["/entrypoint.sh", "litecoind", "-testnet", "-rpcauth=foo:1e72f95158becf7170f3bac8d9224$957a46166672d61d3218c167a223ed5290389e9990cc57397d24c979b4853f8e"]
+        ports:
+        - containerPort: 9332
+        - containerPort: 9333
+        - containerPort: 19332
+        - containerPort: 19333
+        - containerPort: 19444
