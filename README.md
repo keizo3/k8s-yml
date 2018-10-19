@@ -2,14 +2,22 @@
 
 ### 0. 
 install minikube
-install virtualbox
+https://kubernetes.io/docs/tasks/tools/install-minikube/
 
-### 1. start k8s
+install virtualbox
+https://www.virtualbox.org/wiki/Downloads
+
+### 1. start minikube
+```
+$ minikube --vm-driver=virtualbox start
+```
+
+### 2. start k8s
 ```
 $ kubectl create -f litecoind-k8s.yml
 ```
 
-### 2. rpc request
+### 3. rpc request
 ```
 $ curl --user test --data-binary '{"id":"t0", "method": "getinfo", "params": [] }' http://192.168.99.100:30003
 Enter host password for user 'test': //enter "test"
@@ -37,4 +45,15 @@ xDOdimwdOde2Gy-NfsV4RcKNQxB98GR7q7nbi9Ul8Fs=
 ### use local docker image
 ```
 eval $(minikube docker-env)
+```
+
+### minikube mount mac volume
+```
+echo "/Users -network 192.168.99.0 -mask 255.255.255.0 -alldirs -maproot=root:wheel" | sudo tee -a /etc/exports
+sudo nfsd restart
+
+minikube --vm-driver=virtualbox start
+minikube ssh -- sudo umount /Users
+minikube ssh -- sudo /usr/local/etc/init.d/nfs-client start
+minikube ssh -- sudo mount 192.168.99.1:/Users /Users -o rw,async,noatime,rsize=32768,wsize=32768,proto=tcp
 ```

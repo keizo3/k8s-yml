@@ -46,14 +46,22 @@ spec:
         run: litecoind
     spec:
       containers:
-      - name: litecoind
-        image: uphold/litecoind
-        imagePullPolicy: IfNotPresent
-        command: ["/entrypoint.sh", "litecoind", "-testnet", "-rpcuser=test", "-rpcpassword=test", "-rpcallowip=0.0.0.0/0"]
-        # command: ["/entrypoint.sh", "litecoind", "-testnet", "-rpcauth=foo:1e72f95158becf7170f3bac8d9224$957a46166672d61d3218c167a223ed5290389e9990cc57397d24c979b4853f8e"]
-        ports:
-        - containerPort: 9332
-        - containerPort: 9333
-        - containerPort: 19332
-        - containerPort: 19333
-        - containerPort: 19444
+        - name: litecoind
+          # image: uphold/litecoind
+          image: litecoind:0.16
+          imagePullPolicy: IfNotPresent
+          command: ["/entrypoint.sh", "litecoind", "-testnet", "-rpcuser=test", "-rpcpassword=test", "-rpcallowip=0.0.0.0/0"]
+          # command: ["/entrypoint.sh", "litecoind", "-rpcauth=foo:1e72f95158becf7170f3bac8d9224$957a46166672d61d3218c167a223ed5290389e9990cc57397d24c979b4853f8e", "-rpcallowip=0.0.0.0/0"]
+          ports:
+            - containerPort: 9332
+            - containerPort: 9333
+            - containerPort: 19332
+            - containerPort: 19333
+            - containerPort: 19444
+      #     volumeMounts:
+      #       - mountPath: /home/litecoin/.litecoin
+      #         name: mount-share-volume
+      # volumes:
+      #   - name: mount-share-volume
+      #     hostPath:
+      #       path: /Users/Shared/minikube
